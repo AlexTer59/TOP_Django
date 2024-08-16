@@ -1,0 +1,78 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Домашняя работа №1</title>
+    <link rel="shortcut icon" href="{% static 'img/Logo_red.png' %}"/>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+</head>
+<body>
+<!-- =================================================== HEADER =================================================== -->
+    <header>
+        <nav class="header_container">   
+            <div class="header_container__inner">
+                <a href="index.html"><img src="{% static 'img/Logo_white.png' %}" alt="#" class="logo"></a>
+                <div class="student_container">  
+                    <img src="{% static 'img/Photo.jpg' %}" alt="Фото" class="student_photo">
+                    <p class="student_name">Терентьев<br> Алекасандр</p>     
+                </div>
+            </div>  
+        </nav>
+        <div class="title_container">
+            <div class="title_container__inner">
+                <h1 class="header_title"><span>Домашняя</span> Работа №1</h1>
+            </div>
+        </div>
+    </header>
+<!-- ========================================================= MAIN ========================================================= -->
+    <main>
+
+        <div class="main_container">
+            <h2>Мои задачи</h2>
+            <div class="main_container__inner">
+                <!-- ========================= Заметки из базы ========================= -->
+                <h4>В процессе выполнения:</h4>
+                <div class="main_container_item">
+                    {% if uncompleted_notes %}
+                        {% for note in uncompleted_notes %}
+                            <p class="note_text">
+                                {{ note.text }}
+                            </p>
+                        {% endfor %}
+                    {% else %}
+                        <p>Таких задач нет!</p>
+                    {% endif %}
+                </div>
+                <h4>Выполненные:</h4>
+                <div class="main_container_item">
+                    {% if completed_notes %}
+                        {% for note in completed_notes %}
+                            <p class="note_text">
+                                {{ note.text }}
+                            </p>
+                        {% endfor %}
+                    {% else %}
+                        <p class="note_text">Таких задач нет!</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+<!-- ========================================================= FOOTER ========================================================= -->
+    <footer>
+        <div class="footer_container">
+            <div class="footer_container__inner">
+                <p class="footer_text">
+                    Домашняя работа выполнена самостоятельно <span>Терентьевым Александром</span>.
+                </p>
+                <div class="logo_container">
+                    <img class="logo_red" src="{% static 'img/Logo_red.png' %}" alt="Logo">
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
