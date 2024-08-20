@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Домашняя работа №1</title>
+    <title>Домашняя работа №2</title>
     <link rel="shortcut icon" href="{% static 'img/Logo_red.png' %}"/>
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
 </head>
@@ -23,43 +23,16 @@
         </nav>
         <div class="title_container">
             <div class="title_container__inner">
-                <h1 class="header_title"><span>Домашняя</span> Работа №1</h1>
+                <h1 class="header_title"><span>Домашняя</span> Работа №2</h1>
             </div>
         </div>
     </header>
 <!-- ========================================================= MAIN ========================================================= -->
     <main>
+        {% block content %}
 
-        <div class="main_container">
-            <h2>Мои задачи</h2>
-            <div class="main_container__inner">
-                <!-- ========================= Заметки из базы ========================= -->
-                <h4>В процессе выполнения:</h4>
-                <div class="main_container_item">
-                    {% if uncompleted_notes %}
-                        {% for note in uncompleted_notes %}
-                            <p class="note_text">
-                                {{ note.text }}
-                            </p>
-                        {% endfor %}
-                    {% else %}
-                        <p>Таких задач нет!</p>
-                    {% endif %}
-                </div>
-                <h4>Выполненные:</h4>
-                <div class="main_container_item">
-                    {% if completed_notes %}
-                        {% for note in completed_notes %}
-                            <p class="note_text">
-                                {{ note.text }}
-                            </p>
-                        {% endfor %}
-                    {% else %}
-                        <p class="note_text">Таких задач нет!</p>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
+        {% endblock content %}
+
     </main>
 <!-- ========================================================= FOOTER ========================================================= -->
     <footer>
