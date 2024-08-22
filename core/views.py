@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, HttpResponse
-from .models import Note
+from .models import Task
 
 
 def main(request):
-    completed_notes = Note.objects.filter(status=True)
-    uncompleted_notes = Note.objects.filter(status=False)
+    completed_notes = Task.objects.filter(status=True)
+    uncompleted_notes = Task.objects.filter(status=False)
     return render(request, 'task_list.html',
                   {'completed_notes': completed_notes, 'uncompleted_notes': uncompleted_notes})
 
@@ -16,5 +16,5 @@ def add_task(request):
 def add_task_submit(request):
     task = request.POST.get('task')
     status = True if request.POST.get('is_completed') == 'on' else False
-    Note.objects.create(text=task, status=status)
+    Task.objects.create(task=task, status=status)
     return redirect('tasks')
