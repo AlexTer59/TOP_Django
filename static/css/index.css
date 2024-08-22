@@ -193,14 +193,30 @@ header {
     margin-top: 10px;
 }
 
-.form_checkbox_item {
+.form_select_item {
     display: flex;
     gap: 20px;
+    align-items: center;
 }
 
-.form_checkbox_item input{
-    transform: scale(1.4);
+.options {
+    padding: 5px;
+    border: 1px solid var(--dark_blue);
+    border-radius: 5px;
 }
+
+.options select {
+    font-size: 20px;
+    border: none;
+    outline: none;
+}
+
+.error_container {
+    background-color: #d66978;
+    padding: 5px 10px;
+    text-align: center;
+}
+
 
 footer {
     background-color: var(--dark_blue);

@@ -1,20 +1,25 @@
 from django.shortcuts import render, redirect, HttpResponse
-from .models import Task
+from .models import Task, TaskStatus
 
 
 def main(request):
-    completed_notes = Task.objects.filter(status=True)
-    uncompleted_notes = Task.objects.filter(status=False)
-    return render(request, 'task_list.html',
-                  {'completed_notes': completed_notes, 'uncompleted_notes': uncompleted_notes})
+    status_tasks_dict = {}
+    all_tasks = Task.objects.all()
+    for task in all_tasks:
+        status_tasks_dict.setdefault(task.status.status, []).append(task.task)
+    return render(request, 'task_list.html', {'status_task_dict': status_tasks_dict})
 
 
 def add_task(request):
-    return render(request, 'add_task.html')
+    statuses = TaskStatus.objects.all()
+    if request.method == 'POST':
+        task = request.POST.get('task')
+        status = TaskStatus.objects.get(id=request.POST.get('task_status'))
 
-
-def add_task_submit(request):
-    task = request.POST.get('task')
-    status = True if request.POST.get('is_completed') == 'on' else False
-    Task.objects.create(task=task, status=status)
-    return redirect('tasks')
+        if task == '' or not status:
+            error = 'Заполните поле "Введите задачу"'
+            return render(request, 'add_task.html',
+                          {'statuses': statuses, 'error': error})
+        Task.objects.create(status=status, task=task)
+        return redirect('tasks')
+    return render(request, 'add_task.html', {'statuses': statuses})

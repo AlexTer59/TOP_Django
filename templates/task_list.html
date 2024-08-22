@@ -6,29 +6,17 @@
     <div class="main_container__inner">
         <!-- ========================= Задачи из базы ========================= -->
         <div class="main_container_item">
-            <h4>В процессе выполнения:</h4>
-
-            {% if uncompleted_notes %}
-            {% for note in uncompleted_notes %}
-                <p class="task_text">
-                    {{ note.text }}
-                </p>
-            {% endfor %}
-            {% else %}
-                <p class="task_text">Таких задач нет!</p>
-            {% endif %}
-
-            <h4>Выполненные:</h4>
-
-            {% if completed_notes %}
-                {% for note in completed_notes %}
-                    <p class="task_text">
-                        {{ note.text }}
-                    </p>
+            {% if status_task_dict %}
+                {% for status, task_list in status_task_dict.items %}
+                    <h4>{{status}}</h4>
+                    {% for task in task_list %}
+                        <p class="task_text">{{task}}</p>
+                    {% endfor %}
                 {% endfor %}
+
             {% else %}
-                <p class="task_text">Таких задач нет!</p>
-            {% endif %}
+                <p class="task_text">На текущий момент задач нет!</p>
+                {% endif %}
         </div>
         <div class="main_container_item">
             <div class="add_task_container">
