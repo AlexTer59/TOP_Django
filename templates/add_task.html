@@ -2,34 +2,37 @@
 
 {% block content %}
 <div class="main_container">
-<h2>Добавление новой задачи</h2>
-    <div class="main_container_item">
-        <div class="add_task_inner">
-            <form class="add_task_form" method="post" action="{% url 'add_task' %}">
-                {% csrf_token %}
-                <div class="form_input_item">
-                    <h4>Введите задачу:</h4>
-                    <textarea class="input_data" id="input_task" name="task" rows="3"></textarea>
-                </div>
-                <div class="form_select_item">
-                    <h4>Выберите статус задачи:</h4>
-                    <div class="options">
-                        <select name="task_status" id="task_status">
-                        {% for status in statuses %}
-                            <option value="{{ status.id }}"> {{ status.status }}</option>
-                        {% endfor %}
-                        </select>
+    <div class="main_container__inner">
+        <h2>Добавление новой задачи</h2>
+        <div class="main_container_item">
+
+            <div class="add_task_inner">
+                <form class="add_task_form" method="post" action="{% url 'add_task' %}">
+                    {% csrf_token %}
+                    <div class="form_input_item">
+                        <h4>Введите задачу:</h4>
+                        <textarea class="input_data" id="input_task" name="task" rows="3"></textarea>
                     </div>
-                </div>
-                {% if error %}
-                    <div class="error_container">
-                        <h4>{{ error }}</h4>
+                    <div class="form_select_item">
+                        <h4>Выберите статус задачи:</h4>
+                        <div class="options">
+                            <select name="task_status" id="task_status">
+                            {% for status in statuses %}
+                                <option value="{{ status.id }}"> {{ status.status }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
                     </div>
-                {% endif %}
-                <div class="add_task_container">
-                    <button type="submit" class="add_task_btn">Добавить задачу</button>
-                </div>
-            </form>
+                    {% if error %}
+                        <div class="error_container">
+                            <h4>{{ error }}</h4>
+                        </div>
+                    {% endif %}
+                    <div class="add_task_container">
+                        <button type="submit" class="add_task_btn">Добавить задачу</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

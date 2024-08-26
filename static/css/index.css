@@ -40,7 +40,13 @@
     letter-spacing: -0.02em;
 }
 
+html, body {
+    height: 100%
+}
+
 body {
+    display: flex;
+    flex-direction: column;
     width: 1200px;
     margin: 0 auto;
 }
@@ -116,8 +122,13 @@ header {
     font-family: var(--font_header_title);
 }
 
-.main_container {
+main {
+    flex-grow: 1;
     background-color: var(--bg_main_color);
+}
+
+.main_container {
+
     padding-top: 45px;
     padding-bottom: 45px;
 }
@@ -127,12 +138,16 @@ header {
 }
 
 .main_container__inner {
-    display: flex;
-    flex-direction: column;
     width: var(--content_width);
     margin: 0 auto;
     gap: 10px;
     font-size: 20px;
+}
+
+.main_container_item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .task_text {
@@ -141,6 +156,7 @@ header {
 
 .add_task_container{
     display: flex;
+    margin-top: 20px;
     justify-content: center;
 }
 
@@ -161,6 +177,14 @@ header {
 .add_task_btn:hover {
     background-color: var(--red);
     cursor: pointer;
+}
+
+.status_list {
+    text-align: right;
+}
+
+.status_list a:hover {
+    color: var(--red);
 }
 
 .add_task_inner {
@@ -219,6 +243,7 @@ header {
 
 
 footer {
+
     background-color: var(--dark_blue);
 }
 
@@ -230,7 +255,7 @@ footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 40px 0;
+    padding: 10px 0;
 }
 .footer_text {
     font-family: var(--font_text);

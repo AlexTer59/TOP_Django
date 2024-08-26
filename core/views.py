@@ -3,11 +3,22 @@ from .models import Task, TaskStatus
 
 
 def main(request):
-    status_tasks_dict = {}
     all_tasks = Task.objects.all()
+    all_status = TaskStatus.objects.all()
+    status_tasks_dict = {}
+    active_status_obj = None
+    active_status_id = request.GET.get('status')
+    if active_status_id:
+        active_status_obj = TaskStatus.objects.get(id=active_status_id)
+        all_tasks = all_tasks.filter(status__id=active_status_id)
     for task in all_tasks:
-        status_tasks_dict.setdefault(task.status.status, []).append(task.task)
-    return render(request, 'task_list.html', {'status_task_dict': status_tasks_dict})
+        status_tasks_dict.setdefault(task.status, []).append(task.task)
+    return render(request, 'task_list.html',
+                  {
+                      'status_task_dict': status_tasks_dict,
+                      'active_status': active_status_obj,
+                      'all_statuses': all_status
+                  })
 
 
 def add_task(request):
