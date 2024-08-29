@@ -55,10 +55,6 @@ a {
     text-decoration: None;
 }
 
-a:hover {
-    color: var(--red);
-}
-
 header {
     background-image: url(../img/bg_header.jpg);
 }
@@ -185,6 +181,10 @@ main {
     justify-content: space-between;
 }
 
+.main_container_item a:hover {
+    color: var(--red);
+}
+
 .task_text {
     margin: 5px 50px;
 }
@@ -218,7 +218,6 @@ main {
     text-align: right;
 }
 
-
 .add_task_inner {
     width: 600px;
     margin: 10px auto;
@@ -241,7 +240,7 @@ main {
 .input_data {
     font-family: var(--font_text);
     font-size: 20px;
-    resize: none;
+    resize: vertical;
     width: 100%;
     padding: 5px;
     border-radius: 5px;
@@ -302,7 +301,7 @@ main {
 }
 .note-author {
     font-weight: bold;
-    color: #333;
+    color: var(--dark_text);
 }
 .note-date {
     font-size: 0.85em;
@@ -324,6 +323,8 @@ main {
 }
 .note-form input,
 .note-form textarea {
+    font-family: var(--font_text);
+    font-size: 20px;
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
@@ -335,7 +336,6 @@ main {
     height: 100px;
     resize: vertical;
 }
-
 
 footer {
     background-color: var(--dark_blue);

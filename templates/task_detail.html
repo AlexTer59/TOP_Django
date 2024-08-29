@@ -17,12 +17,12 @@
             </div>
         </div>
         <div class="notes-section">
-            <h4>Заметки ({{ comments|length }})</h4>
-            {% for comment in comments %}
+            <h4>Заметки ({{ notes|length }})</h4>
+            {% for note in notes %}
                 <div class="note">
                     <p class="note-author">Анонимус</p>
-                    <p class="note-date">Дата: {{ comment.created_at }}</p>
-                    <p class="note-text">{{ comment.text }}</p>
+                    <p class="note-date">Дата: {{ note.created_at }}</p>
+                    <p class="note-text">{{ note.note }}</p>
                 </div>
             {% endfor %}
 
@@ -30,11 +30,11 @@
 
         <div class="note-form">
             <h4>Добавить заметку:</h4>
-            <form action="#" method="post">
+            <form action="{% url 'add_note' task.id %}" method="post">
                 {% csrf_token %}
 
                 <label for="note">Заметка</label>
-                <textarea id="note" name="comment" required></textarea>
+                <textarea id="note" name="note" required></textarea>
 
                 <button type="submit" class="task_btn">Отправить</button>
                 {% if error %}

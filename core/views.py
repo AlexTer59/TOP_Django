@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse
-from .models import Task, TaskStatus
+from .models import Task, TaskStatus, TaskNote
 
 
 def main(request):
@@ -38,5 +38,25 @@ def add_task(request):
 
 def task_detail(request, task_id):
     task = Task.objects.get(id=task_id)
+    notes = TaskNote.objects.filter(task=task)
 
-    return render(request, 'task_detail.html', {'task': task})
+    return render(request, 'task_detail.html',
+                  {'task': task,
+                   'notes': notes})
+
+
+def add_note(request, task_id):
+    if request.method == 'POST':
+        task = Task.objects.get(id=task_id)
+        note = request.POST.get('note')
+        notes = TaskNote.objects.filter(task=task)
+        if note == '':
+            error = 'Заполните поле "Заметка"'
+            return render(request, 'task_detail.html',
+                          {'task': task,
+                           'error': error,
+                           'notes': notes})
+        TaskNote.objects.create(note=note, task=task)
+        return redirect(task_detail, task_id)
+
+    return redirect(task_detail, task_id)
