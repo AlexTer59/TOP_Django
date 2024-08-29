@@ -38,8 +38,8 @@ def add_task(request):
 
 def task_detail(request, task_id):
     task = Task.objects.get(id=task_id)
-    notes = TaskNote.objects.filter(task=task)
-
+    # notes = TaskNote.objects.filter(task=task)
+    notes = task.task_note.all()
     return render(request, 'task_detail.html',
                   {'task': task,
                    'notes': notes})
@@ -49,7 +49,7 @@ def add_note(request, task_id):
     if request.method == 'POST':
         task = Task.objects.get(id=task_id)
         note = request.POST.get('note')
-        notes = TaskNote.objects.filter(task=task)
+        notes = task.task_note.all()
         if note == '':
             error = 'Заполните поле "Заметка"'
             return render(request, 'task_detail.html',
