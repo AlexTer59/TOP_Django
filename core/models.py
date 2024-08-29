@@ -31,3 +31,20 @@ class Task(models.Model):
         verbose_name_plural = 'Задачи'
 
 
+class TaskNote(models.Model):
+    note = models.TextField(max_length=1000, verbose_name='Заметка')
+    task = models.ForeignKey(Task,
+                             blank=True,
+                             null=True,
+                             on_delete=models.CASCADE,
+                             related_name='task_note',
+                             verbose_name='Задача')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.note[:15]}...'
+
+    class Meta:
+        verbose_name = 'Заметка'
+        verbose_name_plural = 'Заметки'
+
