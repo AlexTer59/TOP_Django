@@ -1,0 +1,49 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="main_container">
+    <div class="main_container__inner">
+        <h2>Задача</h2>
+        <div class="main_container_item">
+            <div class="task_list">
+                <h4>Наименование задачи:</h4>
+                <p class="task_text">{{task.task}}</p>
+                <h4>Статус задачи:</h4>
+                <p class="task_text">{{task.status}}</p>
+                <h4>Дата создания задачи:</h4>
+                <p class="task_text">{{task.created_at}}</p>
+                <h4>Дата последнего изменения задачи:</h4>
+                <p class="task_text">{{task.updated_at}}</p>
+            </div>
+        </div>
+        <div class="notes-section">
+            <h4>Заметки ({{ comments|length }})</h4>
+            {% for comment in comments %}
+                <div class="note">
+                    <p class="note-author">Анонимус</p>
+                    <p class="note-date">Дата: {{ comment.created_at }}</p>
+                    <p class="note-text">{{ comment.text }}</p>
+                </div>
+            {% endfor %}
+
+        </div>
+
+        <div class="note-form">
+            <h4>Добавить заметку:</h4>
+            <form action="#" method="post">
+                {% csrf_token %}
+
+                <label for="note">Заметка</label>
+                <textarea id="note" name="comment" required></textarea>
+
+                <button type="submit" class="task_btn">Отправить</button>
+                {% if error %}
+                    <div class="error_container">
+                        <h4>{{ error }}</h4>
+                    </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

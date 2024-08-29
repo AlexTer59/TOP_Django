@@ -51,6 +51,14 @@ body {
     margin: 0 auto;
 }
 
+a {
+    text-decoration: None;
+}
+
+a:hover {
+    color: var(--red);
+}
+
 header {
     background-image: url(../img/bg_header.jpg);
 }
@@ -146,7 +154,7 @@ header {
 }
 
 .nav_bar__inner a:hover {
-    color: var(--red)
+    color: var(--red);
 }
 
 main {
@@ -187,7 +195,7 @@ main {
     justify-content: center;
 }
 
-.add_task_btn {
+.task_btn {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -201,7 +209,7 @@ main {
     text-decoration: none;
 }
 
-.add_task_btn:hover {
+.task_btn:hover {
     background-color: var(--red);
     cursor: pointer;
 }
@@ -210,9 +218,6 @@ main {
     text-align: right;
 }
 
-.status_list a:hover {
-    color: var(--red);
-}
 
 .add_task_inner {
     width: 600px;
@@ -268,9 +273,71 @@ main {
     text-align: center;
 }
 
+.container-post {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+.post-content {
+    margin-bottom: 40px;
+}
+.post-date {
+    color: #888;
+    font-size: 0.9em;
+    margin-bottom: 20px;
+}
+.notes-section {
+    margin-top: 40px;
+}
+.notes-section h4 {
+    margin-bottom: 20px;
+}
+.note {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+}
+.note-author {
+    font-weight: bold;
+    color: #333;
+}
+.note-date {
+    font-size: 0.85em;
+    color: #888;
+    margin-bottom: 5px;
+}
+.note-text {
+    margin: 0;
+}
+.note-form {
+    margin-top: 40px;
+}
+.note-form h4 {
+    margin-bottom: 20px;
+}
+.note-form label {
+    display: block;
+    margin-bottom: 5px;
+}
+.note-form input,
+.note-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid var(--dark_blue);
+    border-radius: 4px;
+
+}
+.note-form textarea {
+    height: 100px;
+    resize: vertical;
+}
+
 
 footer {
-
     background-color: var(--dark_blue);
 }
 
@@ -278,12 +345,14 @@ footer {
     width: var(--content_width);
     margin: 0 auto;
 }
+
 .footer_container__inner {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 0;
 }
+
 .footer_text {
     font-family: var(--font_text);
     color: var(--light_text);

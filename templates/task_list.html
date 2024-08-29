@@ -11,7 +11,7 @@
                     {% for status, task_list in status_task_dict.items %}
                         <h4>{{status.status}}</h4>
                         {% for task in task_list %}
-                            <p class="task_text">{{task}}</p>
+                            <p class="task_text"><a href="{% url 'task_detail' task.id %}">{{task.task}}</a></p>
                         {% endfor %}
                     {% endfor %}
                 {% else %}
@@ -39,7 +39,7 @@
             </aside>
         </div>
         <div class="add_task_container">
-                <a href="/add_task" class="add_task_btn">Добавить задачу</a>
+                <a href="{% url 'add_task' %}" class="task_btn">Добавить задачу</a>
         </div>
     </div>
 </div>

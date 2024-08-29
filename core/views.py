@@ -10,9 +10,9 @@ def main(request):
     active_status_id = request.GET.get('status')
     if active_status_id:
         active_status_obj = TaskStatus.objects.get(id=active_status_id)
-        all_tasks = all_tasks.filter(status__id=active_status_id)
+        all_tasks = active_status_obj.tasks_status.all()
     for task in all_tasks:
-        status_tasks_dict.setdefault(task.status, []).append(task.task)
+        status_tasks_dict.setdefault(task.status, []).append(task)
     return render(request, 'task_list.html',
                   {
                       'status_task_dict': status_tasks_dict,
@@ -34,3 +34,9 @@ def add_task(request):
         Task.objects.create(status=status, task=task)
         return redirect('tasks')
     return render(request, 'add_task.html', {'statuses': statuses})
+
+
+def task_detail(request, task_id):
+    task = Task.objects.get(id=task_id)
+
+    return render(request, 'task_detail.html', {'task': task})
