@@ -1,5 +1,6 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect
 from .models import Task, TaskStatus, TaskNote
+from .forms import AddTaskForm, AddNoteForm
 
 
 def main(request):
@@ -23,40 +24,37 @@ def main(request):
 
 def add_task(request):
     statuses = TaskStatus.objects.all()
+    add_task_form = AddTaskForm()
     if request.method == 'POST':
-        task = request.POST.get('task')
-        status = TaskStatus.objects.get(id=request.POST.get('task_status'))
-
-        if task == '' or not status:
-            error = 'Заполните поле "Введите задачу"'
-            return render(request, 'add_task.html',
-                          {'statuses': statuses, 'error': error})
-        Task.objects.create(status=status, task=task)
-        return redirect('tasks')
-    return render(request, 'add_task.html', {'statuses': statuses})
+        add_task_form = AddTaskForm(request.POST)
+        if add_task_form.is_valid():
+            data = add_task_form.cleaned_data
+            Task.objects.create(status=data['status'], task=data['task'])
+            return redirect('tasks')
+        return render(request, 'add_task.html',
+                          {'statuses': statuses,
+                           'add_task_form': add_task_form})
+    return render(request, 'add_task.html',
+                  {'statuses': statuses,
+                   'add_task_form': add_task_form})
 
 
 def task_detail(request, task_id):
     task = Task.objects.get(id=task_id)
-    # notes = TaskNote.objects.filter(task=task)
     notes = task.task_note.all()
+    add_note_form = AddNoteForm()
+    if request.method == 'POST':
+        add_note_form = AddNoteForm(request.POST)
+        if add_note_form.is_valid():
+            note = add_note_form.cleaned_data['note']
+            TaskNote.objects.create(note=note, task=task)
+            return redirect(task_detail, task_id)
+        return render(request, 'task_detail.html',
+                      {'task': task,
+                       'notes': notes,
+                       'add_note_form': add_note_form})
+
     return render(request, 'task_detail.html',
                   {'task': task,
-                   'notes': notes})
-
-
-def add_note(request, task_id):
-    if request.method == 'POST':
-        task = Task.objects.get(id=task_id)
-        note = request.POST.get('note')
-        notes = task.task_note.all()
-        if note == '':
-            error = 'Заполните поле "Заметка"'
-            return render(request, 'task_detail.html',
-                          {'task': task,
-                           'error': error,
-                           'notes': notes})
-        TaskNote.objects.create(note=note, task=task)
-        return redirect(task_detail, task_id)
-
-    return redirect(task_detail, task_id)
+                   'notes': notes,
+                   'add_note_form': add_note_form})

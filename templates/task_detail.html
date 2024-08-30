@@ -30,18 +30,18 @@
 
         <div class="note-form">
             <h4>Добавить заметку:</h4>
-            <form action="{% url 'add_note' task.id %}" method="post">
+            <form action="{% url 'task_detail' task.id %}" method="post">
                 {% csrf_token %}
 
-                <label for="note">Заметка</label>
-                <textarea id="note" name="note" required></textarea>
-
-                <button type="submit" class="task_btn">Отправить</button>
-                {% if error %}
+                <label for="{{ note_add_form.note.id_for_label }}">{{ add_note_form.note.label }}:</label>
+                {{ add_note_form.note }}
+                {% if add_note_form.note.errors %}
                     <div class="error_container">
-                        <h4>{{ error }}</h4>
+                        {{ add_note_form.note.errors }}
                     </div>
                 {% endif %}
+
+                <button type="submit" class="task_btn">Отправить</button>
             </form>
         </div>
     </div>

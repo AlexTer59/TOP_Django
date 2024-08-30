@@ -11,23 +11,25 @@
                     {% csrf_token %}
                     <div class="form_input_item">
                         <h4>Введите задачу:</h4>
-                        <textarea class="input_data" id="input_task" name="task" rows="3"></textarea>
+                        {{ add_task_form.task }}
+                        {% if add_task_form.task.errors %}
+                            <div class="error_container">
+                                {{ add_task_form.task.errors }}
+                            </div>
+                        {% endif %}
                     </div>
+
                     <div class="form_select_item">
                         <h4>Выберите статус задачи:</h4>
                         <div class="options">
-                            <select name="task_status" id="task_status">
-                            {% for status in statuses %}
-                                <option value="{{ status.id }}"> {{ status.status }}</option>
-                            {% endfor %}
-                            </select>
+                            {{ add_task_form.status }}
+                            {% if add_task_form.status.errors %}
+                                <div class="error_container">
+                                    <h4>{{ add_task_form.status.errors }}</h4>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
-                    {% if error %}
-                        <div class="error_container">
-                            <h4>{{ error }}</h4>
-                        </div>
-                    {% endif %}
                     <div class="add_task_container">
                         <button type="submit" class="task_btn">Добавить задачу</button>
                     </div>
