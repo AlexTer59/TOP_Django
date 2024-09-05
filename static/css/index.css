@@ -199,8 +199,8 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 205px;
-    height: 50px;
+    min-width: 205px;
+    min-height: 50px;
     background-color: var(--dark_blue);
     color: var(--light_text);
     border: none;

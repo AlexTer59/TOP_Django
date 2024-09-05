@@ -2,7 +2,7 @@ from django.db import models
 
 
 class TaskStatus(models.Model):
-    status = models.CharField(max_length=100, verbose_name='Статус задачи')
+    status = models.CharField(max_length=128, verbose_name='Статус задачи')
 
     def __str__(self):
         return self.status
@@ -19,7 +19,7 @@ class Task(models.Model):
                                on_delete=models.SET_NULL,
                                related_name='tasks_status',
                                verbose_name='Статус задачи')
-    task = models.CharField(max_length=256, verbose_name='Задача')
+    task = models.CharField(max_length=1024, verbose_name='Задача')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -32,7 +32,7 @@ class Task(models.Model):
 
 
 class TaskNote(models.Model):
-    note = models.TextField(max_length=1000, verbose_name='Заметка')
+    note = models.TextField(max_length=1024, verbose_name='Заметка')
     task = models.ForeignKey(Task,
                              blank=True,
                              null=True,
@@ -48,3 +48,14 @@ class TaskNote(models.Model):
         verbose_name = 'Заметка'
         verbose_name_plural = 'Заметки'
 
+
+class Feedback(models.Model):
+    name = models.CharField(max_length=256)
+    text = models.TextField(max_length=1000)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'

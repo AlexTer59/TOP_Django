@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Task, TaskStatus, TaskNote
-from .forms import AddTaskForm, AddNoteForm
+from .models import Task, TaskStatus, TaskNote, Feedback
+from .forms import AddTaskForm, AddNoteForm, AddFeedbackForm
 
 
 def main(request):
@@ -49,12 +49,23 @@ def task_detail(request, task_id):
             note = add_note_form.cleaned_data['note']
             TaskNote.objects.create(note=note, task=task)
             return redirect(task_detail, task_id)
-        return render(request, 'task_detail.html',
-                      {'task': task,
-                       'notes': notes,
-                       'add_note_form': add_note_form})
-
     return render(request, 'task_detail.html',
                   {'task': task,
                    'notes': notes,
                    'add_note_form': add_note_form})
+
+
+def add_feedback(request):
+    add_feedback_form = AddFeedbackForm()
+    if request.method == 'POST':
+        add_feedback_form = AddFeedbackForm(request.POST)
+        if add_feedback_form.is_valid():
+            data = add_feedback_form.cleaned_data
+            Feedback.objects.create(name=data['name'], text=data['text'])
+            return redirect('success')
+    return render(request, 'add_feedback.html',
+                  {'add_feedback_form': add_feedback_form})
+
+
+def feedback_success(request):
+    return render(request, 'success_page.html')

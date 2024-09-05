@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Домашняя работа №5</title>
+    <title>Домашняя работа №6</title>
     <link rel="shortcut icon" href="{% static 'img/Logo_red.png' %}"/>
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
 </head>
@@ -23,13 +23,14 @@
         </div>
         <div class="title_container">
             <div class="title_container__inner">
-                <h1 class="header_title"><span>Домашняя</span> Работа №5</h1>
+                <h1 class="header_title"><span>Домашняя</span> Работа №6</h1>
             </div>
         </div>
         <nav class="nav_bar">
             <div class="nav_bar__inner">
                 <a href="{% url 'tasks' %}">Список задач</a>
                 <a href="{% url 'add_task' %}">Добавить задачу</a>
+                <a href="{% url 'add_feedback' %}">Оставить отзыв</a>
             </div>
         </nav>
     </header>
