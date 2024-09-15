@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Task, TaskStatus, TaskNote, Feedback
-from .forms import AddTaskForm, AddNoteForm, AddFeedbackForm
+from .forms import *
 
 
 def main(request):
@@ -24,9 +24,9 @@ def main(request):
 
 def add_task(request):
     statuses = TaskStatus.objects.all()
-    add_task_form = AddTaskForm()
+    add_task_form = AddTaskModelForm()
     if request.method == 'POST':
-        add_task_form = AddTaskForm(request.POST)
+        add_task_form = AddTaskModelForm(request.POST)
         if add_task_form.is_valid():
             data = add_task_form.cleaned_data
             Task.objects.create(status=data['status'], task=data['task'])
@@ -42,9 +42,9 @@ def add_task(request):
 def task_detail(request, task_id):
     task = Task.objects.get(id=task_id)
     notes = task.task_note.all()
-    add_note_form = AddNoteForm()
+    add_note_form = AddNoteModelForm()
     if request.method == 'POST':
-        add_note_form = AddNoteForm(request.POST)
+        add_note_form = AddNoteModelForm(request.POST)
         if add_note_form.is_valid():
             note = add_note_form.cleaned_data['note']
             TaskNote.objects.create(note=note, task=task)
@@ -56,9 +56,9 @@ def task_detail(request, task_id):
 
 
 def add_feedback(request):
-    add_feedback_form = AddFeedbackForm()
+    add_feedback_form = AddFeedbackModelForm()
     if request.method == 'POST':
-        add_feedback_form = AddFeedbackForm(request.POST)
+        add_feedback_form = AddFeedbackModelForm(request.POST)
         if add_feedback_form.is_valid():
             data = add_feedback_form.cleaned_data
             Feedback.objects.create(name=data['name'], text=data['text'])
