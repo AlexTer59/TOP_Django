@@ -11,7 +11,8 @@ class AddTaskModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(AddTaskModelForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'input_data'
+            visible.field.widget.attrs['class'] = 'form-control'
+
 
     def clean_task(self):
         forbidden_words = ('дурак', 'дура', 'fuck')
@@ -20,6 +21,12 @@ class AddTaskModelForm(forms.ModelForm):
             if word in forbidden_words:
                 raise ValidationError('Задача не прошла цензуру! Попробуйте еще раз...')
         return task
+
+    def clean_status(self):
+        status = self.cleaned_data['status']
+        if not status:
+            raise ValidationError('Статус не может быть пустым! Выберите из списка...')
+        return status
 
 
 class AddNoteModelForm(forms.ModelForm):
@@ -30,7 +37,7 @@ class AddNoteModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(AddNoteModelForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'input_data'
+            visible.field.widget.attrs['class'] = 'form-control'
 
     def clean_note(self):
         forbidden_words = ('дурак', 'дура', 'fuck')
@@ -49,7 +56,7 @@ class AddFeedbackModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(AddFeedbackModelForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'input_data'
+            visible.field.widget.attrs['class'] = 'form-control'
 
     def clean_name(self):
         name = self.cleaned_data['name']

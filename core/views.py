@@ -32,8 +32,8 @@ def add_task(request):
             Task.objects.create(status=data['status'], task=data['task'])
             return redirect('tasks')
         return render(request, 'add_task.html',
-                          {'statuses': statuses,
-                           'add_task_form': add_task_form})
+                      {'statuses': statuses,
+                       'add_task_form': add_task_form})
     return render(request, 'add_task.html',
                   {'statuses': statuses,
                    'add_task_form': add_task_form})

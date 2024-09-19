@@ -1,0 +1,72 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Домашняя работа №8</title>
+    <link rel="shortcut icon" href="{% static 'img/Logo_red.png' %}"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+</head>
+<body>
+<!-- =================================================== HEADER =================================================== -->
+
+<header class="header_box p-3">
+    <div class="container">
+        <div class="d-flex justify-content-between flex-row align-items-center">
+            <a href="{% url 'tasks' %}"><img src="{% static 'img/Logo_white.png' %}" alt="#" width="200px" class=></a>
+            <div class="student_container d-flex flex-row align-items-center">
+                <img src="{% static 'img/Photo.jpg' %}" alt="Фото" class="student_photo">
+                <p class="student_name mb-0">Терентьев<br>Алекасандр</p>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center flex-row align-items-center">
+            <div class="title_container">
+                <h1 class="header_title"><span>Домашняя</span> Работа №8</h1>
+            </div>
+        </div>
+    </div>
+</header>
+<nav class="d-flex">
+    <div class="container">
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-end mb-md-0">
+            <li><a href="{% url 'tasks' %}" class="nav-link px-2">Список задач</a></li>
+            <li><a href="{% url 'add_task' %}" class="nav-link px-2">Добавить задачу</a></li>
+            <li><a href="{% url 'add_feedback' %}" class="nav-link px-2">Оставить отзыв</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main class="d-flex align-items-center py-4">
+    {% block content %}
+
+    {% endblock content %}
+
+</main>
+<!-- =================================================== FOOTER =================================================== -->
+
+<footer>
+    <div class="container">
+        <div class="d-flex flex-wrap justify-content-between align-items-center">
+            <p class="footer_text mb-0">
+                Домашняя работа выполнена самостоятельно <span>Терентьевым Александром</span>
+            </p>
+            <div class="logo_container">
+                <img class="logo_red" src="{% static 'img/Logo_red.png' %}" alt="Logo" width="150px">
+            </div>
+        </div>
+
+    </div>
+
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+</html>

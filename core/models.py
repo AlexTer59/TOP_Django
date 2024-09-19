@@ -19,7 +19,7 @@ class Task(models.Model):
                                on_delete=models.SET_NULL,
                                related_name='tasks_status',
                                verbose_name='Статус задачи')
-    task = models.CharField(max_length=1024, verbose_name='Задача')
+    task = models.TextField(max_length=1024, verbose_name='Задача')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

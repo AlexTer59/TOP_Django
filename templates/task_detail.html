@@ -1,49 +1,48 @@
-{% extends 'index.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
-<div class="main_container">
-    <div class="main_container__inner">
-        <h2>Задача</h2>
-        <div class="main_container_item">
-            <div class="task_list">
-                <h4>Наименование задачи:</h4>
-                <p class="task_text">{{task.task}}</p>
-                <h4>Статус задачи:</h4>
-                <p class="task_text">{{task.status}}</p>
-                <h4>Дата создания задачи:</h4>
-                <p class="task_text">{{task.created_at}}</p>
-                <h4>Дата последнего изменения задачи:</h4>
-                <p class="task_text">{{task.updated_at}}</p>
-            </div>
-        </div>
-        <div class="notes-section">
-            <h4>Заметки ({{ notes|length }})</h4>
-            {% for note in notes %}
-                <div class="note">
-                    <p class="note-author">Анонимус</p>
-                    <p class="note-date">Дата: {{ note.created_at }}</p>
-                    <p class="note-text">{{ note.note }}</p>
-                </div>
-            {% endfor %}
 
-        </div>
-
-        <div class="note-form">
-            <h4>Добавить заметку:</h4>
-            <form action="{% url 'task_detail' task.id %}" method="post">
-                {% csrf_token %}
-
-                <label for="{{ note_add_form.note.id_for_label }}">{{ add_note_form.note.label }}:</label>
-                {{ add_note_form.note }}
-                {% if add_note_form.note.errors %}
-                    <div class="error_container">
-                        {{ add_note_form.note.errors }}
-                    </div>
-                {% endif %}
-
-                <button type="submit" class="task_btn">Отправить</button>
-            </form>
+<div class="container">
+    <div class="task_container">
+        <h2 class="text-center">Задача</h2>
+        <div class="task_info">
+            <h4>Наименование задачи:</h4>
+            <p class="px-4">{{task.task}}</p>
+            <h4>Статус задачи:</h4>
+            <p class="px-4">{{task.status}}</p>
+            <h4>Дата создания задачи:</h4>
+            <p class="px-4">{{task.created_at}}</p>
+            <h4>Дата последнего изменения задачи:</h4>
+            <p class="px-4">{{task.updated_at}}</p>
         </div>
     </div>
+    <hr class="my-4">
+    <div class="note_container">
+        <h4 class="mb-4">Заметки ({{ notes|length }})</h4>
+        {% for note in notes %}
+        <div class="note">
+            <p class="fw-bolder mb-0">Анонимус</p>
+            <p class="note-date">Дата: {{ note.created_at }}</p>
+            <p class="note-text mb-3 px-4">{{ note.note }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    <hr class="my-4">
+    <div class="note-form">
+        <h4>Добавить заметку:</h4>
+        <form action="{% url 'task_detail' task.id %}" method="post">
+            {% csrf_token %}
+            {{ add_note_form.note }}
+            {% if add_note_form.note.errors %}
+            <div class="error_container mt-3">
+                {{ add_note_form.note.errors }}
+            </div>
+            {% endif %}
+            <div class="d-grid mt-3">
+                <button type="submit" class="btn btn-primary">Отправить</button>
+            </div>
+        </form>
+    </div>
+
 </div>
 {% endblock content %}

@@ -1,42 +1,35 @@
-{% extends 'index.html' %}
-
+{% extends 'base.html' %}
 {% block content %}
-<div class="main_container">
-    <div class="main_container__inner">
-        <h2>Добавление нового отзыва</h2>
-        <div class="main_container_item">
 
-            <div class="add_task_inner">
-                <form class="add_task_form" method="post" action="{% url 'add_feedback' %}">
-                    {% csrf_token %}
-                    <div class="form_input_item">
-                        <h4>Введите ваше имя:</h4>
-                        {{ add_feedback_form.name }}
-                        {% if add_feedback_form.name.errors %}
-                            <div class="error_container">
-                                {{ add_feedback_form.name.errors }}
-                            </div>
-                        {% endif %}
-                    </div>
+<div class="container">
+    <h2 class="text-center mb-4">Добавление нового отзыва</h2>
+    <div class="col-md-6 mx-auto border p-4 rounded">
+        <form method="post" action="{% url 'add_feedback' %}">
+            {% csrf_token %}
+            <h4 class="text-center mb-3">Введите ваше имя:</h4>
+            {{ add_feedback_form.name }}
+            {% if add_feedback_form.name.errors %}
+                <div class="error_container mt-2">
+                    {{ add_feedback_form.name.errors }}
+                </div>
+            {% endif %}
 
-                    <div class="form_input_item">
-                        <h4>Введите текст отзыва:</h4>
-                        {{ add_feedback_form.text }}
-                        {% if add_feedback_form.text.errors %}
-                            <div class="error_container">
-                                {{ add_feedback_form.text.errors }}
-                            </div>
-                        {% endif %}
-                    </div>
-                    <div class="add_task_container">
-                        <button type="submit" class="task_btn">Добавить отзыв</button>
-                    </div>
-                </form>
+
+            <h4 class="text-center my-3">Введите текст отзыва:</h4>
+            {{ add_feedback_form.text }}
+            {% if add_feedback_form.text.errors %}
+                <div class="error_container">
+                    {{ add_feedback_form.text.errors }}
+                </div>
+            {% endif %}
+
+            <div class="d-grid col-6 mx-auto mt-4">
+                <button type="submit" class="btn btn-primary">Добавить отзыв</button>
             </div>
-        </div>
+        </form>
     </div>
-</div>
 
+</div>
 
 
 {% endblock content %}

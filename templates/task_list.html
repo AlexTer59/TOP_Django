@@ -1,46 +1,53 @@
-{% extends 'index.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
-<div class="main_container">
-    <div class="main_container__inner">
-        <h2>Мои задачи</h2>
-        <!-- ========================= Задачи из базы ========================= -->
-        <div class="main_container_item">
-            <div class="task_list">
+<div class="container">
+    <h2 class="text-center mb-4">Задачи</h2>
+    <div class="row my-5">
+        <div class="form_container col-md-8">
+            <div class="tasks_container">
                 {% if status_task_dict %}
                     {% for status, task_list in status_task_dict.items %}
                         <h4>{{status.status}}</h4>
                         {% for task in task_list %}
-                            <p class="task_text"><a href="{% url 'task_detail' task.id %}">{{task.task}}</a></p>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item px-5">
+                                    <a href="{% url 'task_detail' task.id %}">{{task.task}}</a>
+                                </li>
+                            </ul>
                         {% endfor %}
                     {% endfor %}
                 {% else %}
-                    <p class="task_text">На текущий момент задач нет!</p>
+                    <h4>На текущий момент задач нет!</h4>
                 {% endif %}
             </div>
-            <aside>
-                <div class="status_list">
-                    <div class="status_list__inner">
-                        <h4>Список статусов:</h4>
-                        <a href="{% url 'tasks' %}">Все категории</a><br>
-                        {% if all_statuses %}
-                            {% for status in all_statuses %}
-                                {% if status.id == active_status.id %}
-                                    <b><a href="?status={{ status.id }}">{{ status.status }}</a></b><br>
-                                {% else %}
-                                    <a href="?status={{ status.id }}">{{ status.status }}</a><br>
-                                {% endif %}
-                            {% endfor %}
-                        {% else %}
-                            <p>На текущий момент статусов задач нет!</p>
-                        {% endif %}
-                    </div>
+        </div>
+        <div class="col-md-4">
+            <div class="statuses_container">
+                <h4>Список статусов:</h4>
+                <div class="list-group">
+                    <a href="{% url 'tasks' %}" class="list-group-item list-group-item-action">Все категории</a>
+                    {% if all_statuses %}
+                        {% for status in all_statuses %}
+                            {% if status.id == active_status.id %}
+                                <a href="?status={{ status.id }}" class="list-group-item list-group-item-action active" aria-current="true">
+                                    {{ status.status }}
+                                </a>
+                            {% else %}
+                                <a href="?status={{ status.id }}" class="list-group-item list-group-item-action">
+                                    {{ status.status }}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <h5>На текущий момент задач нет!</h5>
+                    {% endif %}
                 </div>
-            </aside>
+            </div>
         </div>
-        <div class="add_task_container">
-                <a href="{% url 'add_task' %}" class="task_btn">Добавить задачу</a>
-        </div>
+    </div>
+    <div class="d-grid mt-3 col-6 mx-auto">
+        <a href="{% url 'add_task' %}" class="btn btn-primary">Добавить задачу</a>
     </div>
 </div>
 {% endblock content %}

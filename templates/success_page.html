@@ -1,14 +1,11 @@
-{% extends 'index.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
 
-<div class="main_container">
-    <div class="main_container__inner">
-        <h2>Благодарим вас за отзыв!</h2>
-        <div class="add_task_container">
-            <a href="{% url 'tasks' %}" class="task_btn">Вернуться на главную</a>
-        </div>
-
+<div class="container my-5">
+    <h2 class="text-center">Благодарим вас за отзыв!</h2>
+    <div class="d-grid mt-3 col-6 mx-auto">
+        <a href="{% url 'tasks' %}" class="btn btn-primary">Вернуться на главную</a>
     </div>
 </div>
 
