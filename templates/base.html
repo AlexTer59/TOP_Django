@@ -19,9 +19,12 @@
     <div class="container">
         <div class="d-flex justify-content-between flex-row align-items-center">
             <a href="{% url 'tasks' %}"><img src="{% static 'img/Logo_white.png' %}" alt="#" width="200px" class=></a>
-            <div class="student_container d-flex flex-row align-items-center">
-                <img src="{% static 'img/Photo.jpg' %}" alt="Фото" class="student_photo">
-                <p class="student_name mb-0">Терентьев<br>Алекасандр</p>
+            <div class="student_container d-flex flex-row align-items-center justify-content-center">
+                {% if request.user.is_authenticated %}
+                    <p class="student_name mb-0 p-3 text-center">{{ request.user.username }}</p>
+                {% else %}
+                    <a href="{% url 'login' %}"><p class="student_name mb-0 p-3">Войти</p></a>
+                {% endif %}
             </div>
         </div>
         <div class="d-flex justify-content-center flex-row align-items-center">

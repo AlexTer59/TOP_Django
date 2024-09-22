@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <h2 class="text-center mb-4">Войдите в ваш профиль</h2>
+    <div class="col-md-4 mx-auto border p-4 rounded">
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <h4 class="text-center mb-3">Введите ваш логин:</h4>
+            {{ login_form.login }}
+
+            <div class="error_container mt-2">
+                {{ login_form.login.errors }}
+            </div>
+
+
+            <h4 class="text-center my-3">Введите ваш пароль:</h4>
+            {{ login_form.password }}
+
+            <div class="error_container mt-2">
+                {{ login_form.login.errors }}
+            </div>
+             <div class="error_container mt-2">
+                {{ login_form.non_field_errors }}
+             </div>
+            <div class="d-grid col-6 mx-auto mt-4">
+                <button type="submit" class="btn btn-primary">Авторизоваться</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+{% endblock content %}
