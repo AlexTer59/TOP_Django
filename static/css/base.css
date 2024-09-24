@@ -56,6 +56,10 @@ main {
     flex: 1 0 auto;
 }
 
+a {
+    text-decoration: none;
+    color: var(--red);
+}
 /* =================================================== HEADER =================================================== */
 
 .header_box {
@@ -66,19 +70,32 @@ main {
     background-size: cover;
 }
 
-.student_container {
+.header_btn {
     height: 100%;
     min-width: 100px;
     gap: 10px;
     border-radius: 50px;
     background-color: rgba(19, 14, 38, 0.3);
+    transition: 0.2s;
+}
+
+.header_btn:hover {
+    background-color: rgba(19, 14, 38, 0.9);
+}
+
+.dropdown button {
+    border: none;
+}
+
+.dropdown-toggle::after {
+ display: none;
 }
 
 .student_photo {
     width: 50px;
 }
 
-.student_name {
+.header_btn_text {
     font-family: var(--font_header_text);
     font-size: 16px;
     color: var(--light_text);
@@ -112,6 +129,10 @@ nav, footer {
 
 /* =================================================== MAIN =================================================== */
 
+.task_info span, .task_info h5 {
+    font-size: 20px;
+    font-weight: bold;
+}
 
 .list-group-flush a{
     color: var(--dark_text);

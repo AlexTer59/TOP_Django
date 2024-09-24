@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 class AddTaskModelForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ['task', 'status']
+        fields = ['task', 'status', 'profile_to']
 
     def __init__(self, *args, **kwargs):
         super(AddTaskModelForm, self).__init__(*args, **kwargs)

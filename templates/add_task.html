@@ -7,21 +7,26 @@
             {% csrf_token %}
             <h4 class="text-center mb-3">Введите задачу:</h4>
             {{ add_task_form.task }}
-            {% if add_task_form.task.errors %}
-                <div class="error_container mt-2">
-                    {{ add_task_form.task.errors }}
-                </div>
-                {% endif %}
+            <div class="error_container mt-2">
+                {{ add_task_form.task.errors }}
+            </div>
 
             <div class="form_select_item">
                 <h4 class="text-center my-3">Выберите статус задачи:</h4>
                 <div class="options">
                     {{ add_task_form.status }}
-                    {% if add_task_form.status.errors %}
                     <div class="error_container mt-3">
                         {{ add_task_form.status.errors }}
                     </div>
-                    {% endif %}
+                </div>
+            </div>
+            <div class="form_select_item">
+                <h4 class="text-center my-3">Выберите исполнителя задачи:</h4>
+                <div class="options">
+                    {{ add_task_form.profile_to }}
+                    <div class="error_container mt-3">
+                        {{ add_task_form.profile_to.errors }}
+                    </div>
                 </div>
             </div>
             <div class="d-grid col-6 mx-auto mt-4">

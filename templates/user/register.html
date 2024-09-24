@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <h2 class="text-center mb-4">Регистрация</h2>
+    <div class="col-md-6 mx-auto border p-4 rounded">
+        <form method="post" action="{% url 'register' %}">
+            {% csrf_token %}
+            {{ register_form.as_div }}
+            <a href="{% url 'login' %}">У меня уже есть аккаунт</a>
+            <div class="d-grid col-6 mx-auto mt-4">
+                <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+{% endblock content %}

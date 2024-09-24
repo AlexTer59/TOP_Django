@@ -1,4 +1,5 @@
 from django.db import models
+from user.models import Profile
 
 
 class TaskStatus(models.Model):
@@ -22,6 +23,14 @@ class Task(models.Model):
     task = models.TextField(max_length=1024, verbose_name='Задача')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    profile_from = models.ForeignKey(Profile,
+                                     related_name='tasks_from',
+                                     on_delete=models.CASCADE
+                                     )
+    profile_to = models.ForeignKey(Profile,
+                                   related_name='tasks_to',
+                                   on_delete=models.CASCADE
+                                   )
 
     def __str__(self):
         return self.task
@@ -40,6 +49,9 @@ class TaskNote(models.Model):
                              related_name='task_note',
                              verbose_name='Задача')
     created_at = models.DateTimeField(auto_now_add=True)
+    profile = models.ForeignKey(Profile,
+                                related_name='profile_notes',
+                                on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.note[:15]}...'

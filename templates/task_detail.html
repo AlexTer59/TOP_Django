@@ -6,14 +6,13 @@
     <div class="task_container">
         <h2 class="text-center">Задача</h2>
         <div class="task_info">
-            <h4>Наименование задачи:</h4>
+            <h5>Наименование:</h5>
             <p class="px-4">{{task.task}}</p>
-            <h4>Статус задачи:</h4>
-            <p class="px-4">{{task.status}}</p>
-            <h4>Дата создания задачи:</h4>
-            <p class="px-4">{{task.created_at}}</p>
-            <h4>Дата последнего изменения задачи:</h4>
-            <p class="px-4">{{task.updated_at}}</p>
+            <p class=""><span>Статус:</span>&emsp;{{task.status}}</p>
+            <p class=""><span>Назначивший:</span>&emsp;{{task.profile_from}}</p>
+            <p class=""><span>Исполнитель:</span>&emsp;{{task.profile_to}}</p>
+            <p class=""><span>Дата создания:</span>&emsp;{{task.created_at}}</p>
+            <p class=""><span>Дата последнего изменения:</span>&emsp;{{task.updated_at}}</p>
         </div>
     </div>
     <hr class="my-4">
@@ -21,9 +20,9 @@
         <h4 class="mb-4">Заметки ({{ notes|length }})</h4>
         {% for note in notes %}
         <div class="note">
-            <p class="fw-bolder mb-0">Анонимус</p>
+            <p class="fw-bolder mb-0">{{ note.profile.user.username }}</p>
             <p class="note-date">Дата: {{ note.created_at }}</p>
-            <p class="note-text mb-3 px-4">{{ note.note }}</p>
+            <p class="note-text mb-3">{{ note.note }}</p>
         </div>
         {% endfor %}
     </div>
