@@ -3,16 +3,18 @@ from .models import *
 from django.core.exceptions import ValidationError
 
 
-class AddTaskModelForm(forms.ModelForm):
-    class Meta:
-        model = Task
-        fields = ['task', 'status', 'profile_to']
+class AddTaskForm(forms.Form):
+    task = forms.CharField(max_length=1024,
+                           widget=forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}))
+    status = forms.ModelChoiceField(queryset=TaskStatus.objects.all(),
+                                    widget=forms.Select(attrs={'class': 'form-control'}))
+    executors = forms.ModelMultipleChoiceField(queryset=Profile.objects.all(),
+                                               widget=forms.SelectMultiple(attrs={'size': 3, 'class': 'form-control'}))
 
-    def __init__(self, *args, **kwargs):
-        super(AddTaskModelForm, self).__init__(*args, **kwargs)
-        for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'form-control'
-
+    # def __init__(self, *args, **kwargs):
+    #     super(AddTaskForm, self).__init__(*args, **kwargs)
+    #     for visible in self.visible_fields():
+    #         visible.field.widget.attrs['class'] = 'form-control'
 
     def clean_task(self):
         forbidden_words = ('дурак', 'дура', 'fuck')
@@ -27,6 +29,12 @@ class AddTaskModelForm(forms.ModelForm):
         if not status:
             raise ValidationError('Статус не может быть пустым! Выберите из списка...')
         return status
+
+    def clean_executors(self):
+        profile = self.cleaned_data['executors']
+        if not profile:
+            raise ValidationError('Статус не может быть пустым! Выберите из списка...')
+        return profile
 
 
 class AddNoteModelForm(forms.ModelForm):

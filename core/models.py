@@ -27,10 +27,6 @@ class Task(models.Model):
                                      related_name='tasks_from',
                                      on_delete=models.CASCADE
                                      )
-    profile_to = models.ForeignKey(Profile,
-                                   related_name='tasks_to',
-                                   on_delete=models.CASCADE
-                                   )
 
     def __str__(self):
         return self.task
@@ -38,6 +34,23 @@ class Task(models.Model):
     class Meta:
         verbose_name = 'Задача'
         verbose_name_plural = 'Задачи'
+
+
+class TaskExecutor(models.Model):
+    task = models.ForeignKey(Task,
+                             related_name='task_executor',
+                             on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile,
+                                related_name='executor_profile',
+                                on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.task.task[0:25]}... => {self.profile}'
+
+    class Meta:
+        verbose_name = 'Назначение'
+        verbose_name_plural = 'Назначения'
+
 
 
 class TaskNote(models.Model):

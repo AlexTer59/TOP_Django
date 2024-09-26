@@ -17,7 +17,8 @@ def main(request):
 
     if request.user.is_authenticated:
         profile = request.user.profile
-        all_tasks = all_tasks.filter(profile_to=profile)
+        all_tasks = Task.objects.filter(id__in=profile.executor_profile.values_list('task', flat=True))
+
 
     for task in all_tasks:
         status_tasks_dict.setdefault(task.status, []).append(task)
@@ -32,17 +33,19 @@ def main(request):
 @login_required
 def add_task(request):
     statuses = TaskStatus.objects.all()
-    add_task_form = AddTaskModelForm()
+    add_task_form = AddTaskForm()
     if request.method == 'POST':
-        add_task_form = AddTaskModelForm(request.POST)
+        add_task_form = AddTaskForm(request.POST)
         if add_task_form.is_valid():
             data = add_task_form.cleaned_data
             profile = request.user.profile
-            Task.objects.create(status=data['status'],
+            task = Task.objects.create(status=data['status'],
                                 task=data['task'],
                                 profile_from=profile,
-                                profile_to=data['profile_to']
                                 )
+            for executor in data['executors']:
+                TaskExecutor.objects.create(task=task,
+                                        profile=executor)
             return redirect('tasks')
         return render(request, 'add_task.html',
                       {'statuses': statuses,
@@ -55,6 +58,7 @@ def add_task(request):
 @login_required
 def task_detail(request, task_id):
     task = Task.objects.get(id=task_id)
+    executors = [executor.profile.user for executor in task.task_executor.all()]
     notes = task.task_note.all()
     add_note_form = AddNoteModelForm()
     if request.method == 'POST':
@@ -67,7 +71,9 @@ def task_detail(request, task_id):
     return render(request, 'task_detail.html',
                   {'task': task,
                    'notes': notes,
-                   'add_note_form': add_note_form})
+                   'add_note_form': add_note_form,
+                   'executors': executors
+                   })
 
 
 @login_required
