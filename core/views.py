@@ -2,54 +2,65 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import *
 from .forms import *
+from datetime import datetime
 
 
 def main(request):
     all_tasks = Task.objects.all()
-    all_status = TaskStatus.objects.all()
+    all_status = Task.STATUS_CHOICES
     status_tasks_dict = {}
-    active_status_obj = None
     active_status_id = request.GET.get('status')
 
     if active_status_id:
-        active_status_obj = TaskStatus.objects.get(id=active_status_id)
-        all_tasks = active_status_obj.tasks_status.all()
+        active_status_id = int(active_status_id)
+        all_tasks = Task.objects.filter(status=active_status_id)
+        print(all_tasks)
 
     if request.user.is_authenticated:
         profile = request.user.profile
-        all_tasks = Task.objects.filter(id__in=profile.executor_profile.values_list('task', flat=True))
-
+        all_tasks = all_tasks.filter(id__in=profile.executor_profile.values_list('task', flat=True))
 
     for task in all_tasks:
-        status_tasks_dict.setdefault(task.status, []).append(task)
+        status_tasks_dict.setdefault(task.get_status_display(), []).append(task)
     return render(request, 'task_list.html',
                   {
                       'status_task_dict': status_tasks_dict,
-                      'active_status': active_status_obj,
+                      'active_status_id': active_status_id,
                       'all_statuses': all_status
                   })
 
 
 @login_required
 def add_task(request):
-    statuses = TaskStatus.objects.all()
+    statuses = Task.STATUS_CHOICES
     add_task_form = AddTaskForm()
+
     if request.method == 'POST':
         add_task_form = AddTaskForm(request.POST)
+
         if add_task_form.is_valid():
             data = add_task_form.cleaned_data
             profile = request.user.profile
-            task = Task.objects.create(status=data['status'],
-                                task=data['task'],
-                                profile_from=profile,
-                                )
+            date = data['deadline_date']
+            time = data['deadline_time']
+
+            if date and time:
+                deadline = datetime.combine(data['deadline_date'], data['deadline_time'])
+                task = Task.objects.create(status=data['status'],
+                                           task=data['task'],
+                                           deadline=deadline,
+                                           profile_from=profile,
+                                           )
+            else:
+                task = Task.objects.create(status=data['status'],
+                                           task=data['task'],
+                                           profile_from=profile,
+                                           )
+
             for executor in data['executors']:
                 TaskExecutor.objects.create(task=task,
-                                        profile=executor)
+                                            profile=executor)
             return redirect('tasks')
-        return render(request, 'add_task.html',
-                      {'statuses': statuses,
-                       'add_task_form': add_task_form})
     return render(request, 'add_task.html',
                   {'statuses': statuses,
                    'add_task_form': add_task_form})

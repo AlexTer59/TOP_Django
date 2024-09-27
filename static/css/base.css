@@ -134,6 +134,10 @@ nav, footer {
     font-weight: bold;
 }
 
+.danger {
+    color: var(--red);
+}
+
 .list-group-flush a{
     color: var(--dark_text);
 }

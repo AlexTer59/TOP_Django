@@ -1,28 +1,27 @@
 from django.db import models
+from django.utils import timezone
 from user.models import Profile
-
-
-class TaskStatus(models.Model):
-    status = models.CharField(max_length=128, verbose_name='Статус задачи')
-
-    def __str__(self):
-        return self.status
-
-    class Meta:
-        verbose_name = 'Статус задачи'
-        verbose_name_plural = 'Статусы задач'
+from datetime import timedelta
 
 
 class Task(models.Model):
-    status = models.ForeignKey(TaskStatus,
-                               blank=True,
-                               null=True,
-                               on_delete=models.SET_NULL,
-                               related_name='tasks_status',
-                               verbose_name='Статус задачи')
-    task = models.TextField(max_length=1024, verbose_name='Задача')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    STATUS_CHOICES = [
+        (1, 'Активные'),
+        (2, 'Срочные'),
+        (3, 'Просроченые'),
+        (4, 'Выполненые')
+    ]
+
+    status = models.PositiveSmallIntegerField("Статус",
+                                              choices=STATUS_CHOICES)
+    task = models.TextField(max_length=1024,
+                            verbose_name='Задача')
+    deadline = models.DateTimeField(default=timezone.now() + timedelta(weeks=1),
+                                    verbose_name='Дедлайн')
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      verbose_name='Дата создания')
+    updated_at = models.DateTimeField(auto_now=True,
+                                      verbose_name='Дата последнего изменения')
     profile_from = models.ForeignKey(Profile,
                                      related_name='tasks_from',
                                      on_delete=models.CASCADE
@@ -39,10 +38,12 @@ class Task(models.Model):
 class TaskExecutor(models.Model):
     task = models.ForeignKey(Task,
                              related_name='task_executor',
-                             on_delete=models.CASCADE)
+                             on_delete=models.CASCADE,
+                             verbose_name='Задача')
     profile = models.ForeignKey(Profile,
                                 related_name='executor_profile',
-                                on_delete=models.CASCADE)
+                                on_delete=models.CASCADE,
+                                verbose_name='Профиль')
 
     def __str__(self):
         return f'{self.task.task[0:25]}... => {self.profile}'
@@ -50,7 +51,6 @@ class TaskExecutor(models.Model):
     class Meta:
         verbose_name = 'Назначение'
         verbose_name_plural = 'Назначения'
-
 
 
 class TaskNote(models.Model):
@@ -64,7 +64,8 @@ class TaskNote(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     profile = models.ForeignKey(Profile,
                                 related_name='profile_notes',
-                                on_delete=models.CASCADE)
+                                on_delete=models.CASCADE,
+                                verbose_name='Профиль')
 
     def __str__(self):
         return f'{self.note[:15]}...'
@@ -75,8 +76,10 @@ class TaskNote(models.Model):
 
 
 class Feedback(models.Model):
-    name = models.CharField(max_length=256)
-    text = models.TextField(max_length=1000)
+    name = models.CharField(max_length=256,
+                            verbose_name='Имя и фамилия')
+    text = models.TextField(max_length=1000,
+                            verbose_name='Текст отзыва')
 
     def __str__(self):
         return self.name

@@ -8,15 +8,15 @@
         <div class="task_info">
             <h5>Наименование:</h5>
             <p class="px-4">{{task.task}}</p>
-            <p class=""><span>Статус:</span>&emsp;{{task.status}}</p>
-            <p class=""><span>Назначивший:</span>&emsp;{{task.profile_from}}</p>
-            <p class=""><span>Исполнители:</span>&emsp;
+            <p><span>Статус:</span>&emsp;{{task.get_status_display}}</p>
+            <p><span>Назначивший:</span>&emsp;{{task.profile_from}}</p>
+            <p><span>Исполнители:</span>&emsp;
                 {% for executor in executors %}
                     {{ executor.username }}{% if not forloop.last %}, {% endif %}
                 {% endfor %}
             </p>
-            <p class=""><span>Дата создания:</span>&emsp;{{task.created_at}}</p>
-            <p class=""><span>Дата последнего изменения:</span>&emsp;{{task.updated_at}}</p>
+            <p><span>Дата создания:</span>&emsp;{{task.created_at}}</p>
+            <p><span class="danger">Дедлайн:</span>&emsp;{{task.deadline}}</p>
         </div>
     </div>
     <hr class="my-4">

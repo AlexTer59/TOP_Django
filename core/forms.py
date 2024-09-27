@@ -1,20 +1,27 @@
 from django import forms
+from django.contrib.admin.widgets import AdminSplitDateTime
+from django.forms import SplitDateTimeWidget, DateInput, TimeInput
+
 from .models import *
 from django.core.exceptions import ValidationError
 
 
 class AddTaskForm(forms.Form):
     task = forms.CharField(max_length=1024,
-                           widget=forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}))
-    status = forms.ModelChoiceField(queryset=TaskStatus.objects.all(),
-                                    widget=forms.Select(attrs={'class': 'form-control'}))
+                           widget=forms.Textarea(attrs={'rows': 3}))
+    status = forms.ChoiceField(choices=Task.STATUS_CHOICES,
+                               widget=forms.Select)
+    deadline_date = forms.DateField(widget=DateInput(attrs={'type': 'date'}),
+                                   required=False)
+    deadline_time = forms.TimeField(widget=TimeInput(attrs={'type': 'time'}),
+                                   required=False)
     executors = forms.ModelMultipleChoiceField(queryset=Profile.objects.all(),
-                                               widget=forms.SelectMultiple(attrs={'size': 3, 'class': 'form-control'}))
+                                               widget=forms.SelectMultiple(attrs={'size': 3}))
 
-    # def __init__(self, *args, **kwargs):
-    #     super(AddTaskForm, self).__init__(*args, **kwargs)
-    #     for visible in self.visible_fields():
-    #         visible.field.widget.attrs['class'] = 'form-control'
+    def __init__(self, *args, **kwargs):
+        super(AddTaskForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs.update({'class': 'form-control'})
 
     def clean_task(self):
         forbidden_words = ('дурак', 'дура', 'fuck')

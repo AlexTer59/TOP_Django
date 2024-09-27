@@ -8,7 +8,7 @@
             <div class="tasks_container">
                 {% if status_task_dict %}
                     {% for status, task_list in status_task_dict.items %}
-                        <h4>{{status.status}}:</h4>
+                        <h4>{{status}}:</h4>
                         {% for task in task_list %}
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item px-5">
@@ -28,14 +28,14 @@
                 <div class="list-group">
                     <a href="{% url 'tasks' %}" class="list-group-item list-group-item-action">Все категории</a>
                     {% if all_statuses %}
-                        {% for status in all_statuses %}
-                            {% if status.id == active_status.id %}
-                                <a href="?status={{ status.id }}" class="list-group-item list-group-item-action active" aria-current="true">
-                                    {{ status.status }}
+                        {% for status_id, status_name in all_statuses %}
+                            {% if status_id == active_status_id %}
+                                <a href="?status={{ status_id }}" class="list-group-item list-group-item-action active" aria-current="true">
+                                    {{ status_name }}
                                 </a>
                             {% else %}
-                                <a href="?status={{ status.id }}" class="list-group-item list-group-item-action">
-                                    {{ status.status }}
+                                <a href="?status={{ status_id }}" class="list-group-item list-group-item-action">
+                                    {{ status_name }}
                                 </a>
                             {% endif %}
                         {% endfor %}

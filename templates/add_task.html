@@ -20,6 +20,16 @@
                     </div>
                 </div>
             </div>
+            <h4 class="text-center my-3">Введите дату дедлайна:</h4>
+            <div class="d-flex justify-content-between gap-3">
+                {{ add_task_form.deadline_date }}
+                {{ add_task_form.deadline_time }}
+            </div>
+            <div class="error_container mt-2">
+                {{ add_task_form.deadline_date.errors }}
+                {{ add_task_form.deadline_time.errors }}
+            </div>
+
             <div class="form_select_item">
                 <h4 class="text-center my-3">Выберите исполнителя задачи:</h4>
                 <div class="options">
