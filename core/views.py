@@ -14,7 +14,6 @@ def main(request):
     if active_status_id:
         active_status_id = int(active_status_id)
         all_tasks = Task.objects.filter(status=active_status_id)
-        print(all_tasks)
 
     if request.user.is_authenticated:
         profile = request.user.profile
@@ -72,16 +71,32 @@ def task_detail(request, task_id):
     executors = [executor.profile.user for executor in task.task_executor.all()]
     notes = task.task_note.all()
     add_note_form = AddNoteModelForm()
+    profile = request.user.profile
+
+    liked_notes_ids = TaskNoteLike.objects.filter(profile=profile, note__in=notes).values_list('note_id', flat=True)
+
+    task_notes_with_likes =[]
+
+    for note in notes:
+        likes_count = note.note_likes.count()
+        task_notes_with_likes.append({
+            'id': note.id,
+            'note': note.note,
+            'profile': note.profile,
+            'created_at': note.created_at,
+            'likes_count': likes_count,
+            'is_liked': note.id in liked_notes_ids,
+        })
+
     if request.method == 'POST':
         add_note_form = AddNoteModelForm(request.POST)
         if add_note_form.is_valid():
             note = add_note_form.cleaned_data['note']
-            profile = request.user.profile
             TaskNote.objects.create(note=note, task=task, profile=profile)
             return redirect(task_detail, task_id)
     return render(request, 'task_detail.html',
                   {'task': task,
-                   'notes': notes,
+                   'notes': task_notes_with_likes,
                    'add_note_form': add_note_form,
                    'executors': executors
                    })
@@ -103,3 +118,16 @@ def add_feedback(request):
 @login_required
 def feedback_success(request):
     return render(request, 'success_page.html')
+
+@login_required
+def note_like(request, task_id, note_id):
+    note = TaskNote.objects.get(id=note_id)
+    profile = request.user.profile
+
+    like, created = TaskNoteLike.objects.get_or_create(note=note, profile=profile)
+
+    if not created:
+        like.delete()
+
+    return redirect('task_detail', task_id)
+

@@ -6,7 +6,7 @@
     <div class="task_container">
         <h2 class="text-center">Задача</h2>
         <div class="task_info">
-            <h5>Наименование:</h5>
+            <h5 class="mb-3">Наименование:</h5>
             <p class="px-4">{{task.task}}</p>
             <p><span>Статус:</span>&emsp;{{task.get_status_display}}</p>
             <p><span>Назначивший:</span>&emsp;{{task.profile_from}}</p>
@@ -26,7 +26,12 @@
         <div class="note">
             <p class="fw-bolder mb-0">{{ note.profile.user.username }}</p>
             <p class="note-date">Дата: {{ note.created_at }}</p>
-            <p class="note-text mb-3">{{ note.note }}</p>
+            <p class="note-text mb-0">{{ note.note }}</p>
+            {% if note.is_liked %}
+                <p class="mb-4"><a href="{% url 'note_like' task.id note.id %}">Убрать лайк: {{ note.likes_count }}</a></p>
+            {% else %}
+                <p class="mb-4"><a href="{% url 'note_like' task.id note.id %}">Лайкнуть: {{ note.likes_count }}</a></p>
+            {% endif %}
         </div>
         {% endfor %}
     </div>

@@ -80,6 +80,7 @@ class Feedback(models.Model):
                             verbose_name='Имя и фамилия')
     text = models.TextField(max_length=1000,
                             verbose_name='Текст отзыва')
+    created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
@@ -87,3 +88,22 @@ class Feedback(models.Model):
     class Meta:
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
+
+
+class TaskNoteLike(models.Model):
+    note = models.ForeignKey(TaskNote,
+                             on_delete=models.CASCADE,
+                             related_name='note_likes',
+                             )
+    profile = models.ForeignKey(Profile,
+                                on_delete=models.CASCADE,
+                                related_name='profile_likes')
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.profile.user.username} лайкнул заметку "{self.note.note[:20]}..."'
+
+    class Meta:
+        verbose_name = 'Лайк'
+        verbose_name_plural = 'Лайки'
+

@@ -40,7 +40,7 @@ class AddTaskForm(forms.Form):
     def clean_executors(self):
         profile = self.cleaned_data['executors']
         if not profile:
-            raise ValidationError('Статус не может быть пустым! Выберите из списка...')
+            raise ValidationError('Выберите хотя бы одного исполнителя!')
         return profile
 
 
@@ -78,3 +78,5 @@ class AddFeedbackModelForm(forms.ModelForm):
         if len(name.split()) < 2:
             raise ValidationError('Введите имя и фамилию!')
         return name
+
+
