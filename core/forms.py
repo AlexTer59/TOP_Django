@@ -11,10 +11,10 @@ class AddTaskForm(forms.Form):
                            widget=forms.Textarea(attrs={'rows': 3}))
     status = forms.ChoiceField(choices=Task.STATUS_CHOICES,
                                widget=forms.Select)
-    deadline_date = forms.DateField(widget=DateInput(attrs={'type': 'date'}),
-                                   required=False)
-    deadline_time = forms.TimeField(widget=TimeInput(attrs={'type': 'time'}),
-                                   required=False)
+    deadline_date = forms.DateField(widget=DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
+                                    required=False)
+    deadline_time = forms.TimeField(widget=TimeInput(attrs={'type': 'time'}, format='%H:%M'),
+                                    required=False)
     executors = forms.ModelMultipleChoiceField(queryset=Profile.objects.all(),
                                                widget=forms.SelectMultiple(attrs={'size': 3}))
 

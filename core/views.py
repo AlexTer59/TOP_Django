@@ -1,5 +1,11 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import Http404, HttpResponseForbidden
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic import FormView
+from django.utils import timezone
+
 from .models import *
 from .forms import *
 from datetime import datetime
@@ -131,3 +137,70 @@ def note_like(request, task_id, note_id):
 
     return redirect('task_detail', task_id)
 
+
+class TaskEditView(LoginRequiredMixin, FormView):
+    template_name = 'edit_task.html'
+    form_class = AddTaskForm
+
+
+    def get_task(self):
+        return get_object_or_404(Task, id=self.kwargs['task_id'])
+
+    def dispatch(self, request, *args, **kwargs):
+        task = self.get_task()
+
+        # Проверка что текущий пользователь - это создатель задачи
+        if task.profile_from != self.request.user.profile:
+            return HttpResponseForbidden('Вы не можете редактировать эту задачу!')
+
+        # Если пользователь имеет право на редактирование задачи
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse_lazy('task_detail', kwargs={'task_id': self.kwargs['task_id']})
+
+    def get_initial(self):
+        task = self.get_task()
+
+        return {
+            'task': task.task,
+            'status': task.status,
+            'deadline_date': task.deadline.date(),
+            'deadline_time': task.deadline.time(),
+            'executors': task.task_executor.values_list('profile', flat=True)
+        }
+
+    def form_valid(self, form):
+        task = self.get_task()
+
+        task.task = form.cleaned_data['task']
+        task.status = form.cleaned_data['status']
+
+        deadline_date = form.cleaned_data['deadline_date']
+        deadline_time = form.cleaned_data['deadline_time']
+
+        if deadline_date and deadline_time:
+            task.deadline = timezone.make_aware(datetime.combine(deadline_date, deadline_time))
+        task.save()
+
+        current_executors = set(task.task_executor.values_list('profile', flat=True))
+
+        new_executors = set(form.cleaned_data['executors'].values_list('id', flat=True))
+
+        if current_executors != new_executors:
+            TaskExecutor.objects.filter(task=self.kwargs['task_id']).delete() # Очищаем старых исполнителей
+            for executor in form.cleaned_data['executors']:
+                TaskExecutor.objects.create(task=task, profile=executor)
+
+        return super().form_valid(form)
+
+
+@login_required
+def task_ready(request, task_id):
+    task = Task.objects.get(id=task_id)
+
+    if request.user.profile.id in task.task_executor.values_list('profile', flat=True):
+        task.status = 4
+        task.save(update_fields=['status'])
+
+    return redirect('task_detail', task_id)

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="col-md-6 mx-auto border p-4 rounded">
+        <form method="post">
+            {% csrf_token %}
+            <h4 class="text-center mb-3">Введите задачу:</h4>
+            {{ form.task }}
+            <div class="error_container mt-2">
+                {{ form.task.errors }}
+            </div>
+
+            <div class="form_select_item">
+                <h4 class="text-center my-3">Выберите статус задачи:</h4>
+                <div class="options">
+                    {{ form.status }}
+                    <div class="error_container mt-3">
+                        {{ form.status.errors }}
+                    </div>
+                </div>
+            </div>
+            <h4 class="text-center my-3">Введите дату дедлайна:</h4>
+            <div class="d-flex justify-content-between gap-3">
+                {{ form.deadline_date }}
+                {{ form.deadline_time }}
+            </div>
+            <div class="error_container mt-2">
+                {{ form.deadline_date.errors }}
+                {{ form.deadline_time.errors }}
+            </div>
+
+            <div class="form_select_item">
+                <h4 class="text-center my-3">Выберите исполнителя задачи:</h4>
+                <div class="options">
+                    {{ form.executors }}
+                    <div class="error_container mt-3">
+                        {{ form.executors.errors }}
+                    </div>
+                </div>
+            </div>
+            <div class="d-grid col-6 mx-auto mt-4">
+                <button type="submit" class="btn btn-primary">Редактировать задачу</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{% endblock content %}
