@@ -4,8 +4,13 @@
 <div class="container">
     <h2 class="text-center mb-4">Задачи</h2>
     <div class="row my-5">
-        <div class="form_container col-md-8">
+        <div class="col-md-8">
             <div class="tasks_container">
+                <form class="d-flex mb-4" role="search" action="{% url 'tasks' %}">
+                    <input {% if text_filter %} value="{{ text_filter }}" {% endif %} name="text"
+                           class="form-control me-2" type="search" placeholder="Найти" aria-label="Search">
+                    <button class="btn btn-primary" type="submit">Найти</button>
+                </form>
                 {% if status_task_dict %}
                     {% for status, task_list in status_task_dict.items %}
                         <h4>{{status}}:</h4>

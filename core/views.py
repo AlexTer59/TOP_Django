@@ -1,10 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.http import Http404, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 from django.utils import timezone
+
 
 from .models import *
 from .forms import *
@@ -16,6 +18,7 @@ def main(request):
     all_status = Task.STATUS_CHOICES
     status_tasks_dict = {}
     active_status_id = request.GET.get('status')
+    text_filter = request.GET.get('text')
 
     if active_status_id:
         active_status_id = int(active_status_id)
@@ -25,13 +28,25 @@ def main(request):
         profile = request.user.profile
         all_tasks = all_tasks.filter(id__in=profile.executor_profile.values_list('task', flat=True))
 
+    if text_filter:
+        all_tasks = all_tasks.filter(Q(task__icontains=text_filter)|
+                                     Q(status__icontains=text_filter)|
+                                     Q(deadline__icontains=text_filter)|
+                                     Q(created_at__icontains=text_filter)|
+                                     Q(updated_at__icontains=text_filter)|
+                                     Q(profile_from__user__username__icontains=text_filter))
+
+
+
+
     for task in all_tasks:
         status_tasks_dict.setdefault(task.get_status_display(), []).append(task)
     return render(request, 'task_list.html',
                   {
                       'status_task_dict': status_tasks_dict,
                       'active_status_id': active_status_id,
-                      'all_statuses': all_status
+                      'all_statuses': all_status,
+                      'text_filter': text_filter
                   })
 
 
@@ -81,11 +96,11 @@ def task_detail(request, task_id):
 
     liked_notes_ids = TaskNoteLike.objects.filter(profile=profile, note__in=notes).values_list('note_id', flat=True)
 
-    task_notes_with_likes =[]
+    my_task_notes =[]
 
     for note in notes:
         likes_count = note.note_likes.count()
-        task_notes_with_likes.append({
+        my_task_notes.append({
             'id': note.id,
             'note': note.note,
             'profile': note.profile,
@@ -102,7 +117,7 @@ def task_detail(request, task_id):
             return redirect(task_detail, task_id)
     return render(request, 'task_detail.html',
                   {'task': task,
-                   'notes': task_notes_with_likes,
+                   'notes': my_task_notes,
                    'add_note_form': add_note_form,
                    'executors': executors
                    })
