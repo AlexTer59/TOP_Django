@@ -3,9 +3,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import Http404, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.context_processors import request
 from django.urls import reverse_lazy
-from django.views.generic import FormView
+from django.views.generic import FormView, CreateView
 from django.utils import timezone
+from django.utils.timezone import localtime
 
 
 from .models import *
@@ -30,11 +32,11 @@ def main(request):
 
     if text_filter:
         all_tasks = all_tasks.filter(Q(task__icontains=text_filter)|
-                                     Q(status__icontains=text_filter)|
                                      Q(deadline__icontains=text_filter)|
                                      Q(created_at__icontains=text_filter)|
                                      Q(updated_at__icontains=text_filter)|
-                                     Q(profile_from__user__username__icontains=text_filter))
+                                     Q(profile_from__user__username__icontains=text_filter)|
+                                     Q(task_executor__profile__user__username__icontains=text_filter))
 
 
 
@@ -50,40 +52,36 @@ def main(request):
                   })
 
 
-@login_required
-def add_task(request):
-    statuses = Task.STATUS_CHOICES
-    add_task_form = AddTaskForm()
+class AddTaskView(LoginRequiredMixin, FormView):
+    template_name = 'add_task.html'
+    form_class = AddTaskForm
 
-    if request.method == 'POST':
-        add_task_form = AddTaskForm(request.POST)
+    def get_success_url(self):
+        return reverse_lazy('task_detail', kwargs={'task_id': self.object.id})
 
-        if add_task_form.is_valid():
-            data = add_task_form.cleaned_data
-            profile = request.user.profile
-            date = data['deadline_date']
-            time = data['deadline_time']
 
-            if date and time:
-                deadline = datetime.combine(data['deadline_date'], data['deadline_time'])
-                task = Task.objects.create(status=data['status'],
-                                           task=data['task'],
-                                           deadline=deadline,
-                                           profile_from=profile,
-                                           )
-            else:
-                task = Task.objects.create(status=data['status'],
-                                           task=data['task'],
-                                           profile_from=profile,
-                                           )
+    def form_valid(self, form):
+        task_data = {
+            'task': form.cleaned_data['task'],
+            'status': form.cleaned_data['status'],
+            'profile_from': self.request.user.profile,
+        }
 
-            for executor in data['executors']:
-                TaskExecutor.objects.create(task=task,
-                                            profile=executor)
-            return redirect('tasks')
-    return render(request, 'add_task.html',
-                  {'statuses': statuses,
-                   'add_task_form': add_task_form})
+        deadline_date = form.cleaned_data['deadline_date']
+        deadline_time = form.cleaned_data['deadline_time']
+
+        if deadline_date and deadline_time:
+            task_data['deadline'] = timezone.make_aware(datetime.combine(deadline_date, deadline_time))
+
+
+        task = Task.objects.create(**task_data)
+
+        for executor in form.cleaned_data['executors']:
+            TaskExecutor.objects.create(task=task, profile=executor)
+
+        self.object = task
+
+        return super().form_valid(form)
 
 
 @login_required
@@ -176,12 +174,13 @@ class TaskEditView(LoginRequiredMixin, FormView):
 
     def get_initial(self):
         task = self.get_task()
+        deadline_datetime = localtime(task.deadline)
 
         return {
             'task': task.task,
             'status': task.status,
-            'deadline_date': task.deadline.date(),
-            'deadline_time': task.deadline.time(),
+            'deadline_date': deadline_datetime.date(),
+            'deadline_time': deadline_datetime.time(),
             'executors': task.task_executor.values_list('profile', flat=True)
         }
 

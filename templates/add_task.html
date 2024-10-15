@@ -6,36 +6,36 @@
         <form method="post" action="{% url 'add_task' %}">
             {% csrf_token %}
             <h4 class="text-center mb-3">Введите задачу:</h4>
-            {{ add_task_form.task }}
+            {{ form.task }}
             <div class="error_container mt-2">
-                {{ add_task_form.task.errors }}
+                {{ form.task.errors }}
             </div>
 
             <div class="form_select_item">
                 <h4 class="text-center my-3">Выберите статус задачи:</h4>
                 <div class="options">
-                    {{ add_task_form.status }}
+                    {{ form.status }}
                     <div class="error_container mt-3">
-                        {{ add_task_form.status.errors }}
+                        {{ form.status.errors }}
                     </div>
                 </div>
             </div>
             <h4 class="text-center my-3">Введите дату дедлайна:</h4>
             <div class="d-flex justify-content-between gap-3">
-                {{ add_task_form.deadline_date }}
-                {{ add_task_form.deadline_time }}
+                {{ form.deadline_date }}
+                {{ form.deadline_time }}
             </div>
             <div class="error_container mt-2">
-                {{ add_task_form.deadline_date.errors }}
-                {{ add_task_form.deadline_time.errors }}
+                {{ form.deadline_date.errors }}
+                {{ form.deadline_time.errors }}
             </div>
 
             <div class="form_select_item">
                 <h4 class="text-center my-3">Выберите исполнителя задачи:</h4>
                 <div class="options">
-                    {{ add_task_form.executors }}
+                    {{ form.executors }}
                     <div class="error_container mt-3">
-                        {{ add_task_form.executors.errors }}
+                        {{ form.executors.errors }}
                     </div>
                 </div>
             </div>
