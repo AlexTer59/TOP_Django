@@ -2,25 +2,20 @@
 {% block content %}
 
 <div class="container">
-    <h2 class="text-center mb-4">Добавление нового отзыва</h2>
-    <div class="col-md-6 mx-auto border p-4 rounded">
-        <form method="post" action="{% url 'add_feedback' %}">
+    <h2 class="page_title text-center mb-4">Добавление нового отзыва</h2>
+    <div class="form_container col-md-6 mx-auto border p-4 rounded">
+        <form id="feedback_form" method="post" action="{% url 'api_add_feedback' %}">
+            <div class="formErrors error_container"></div>
             {% csrf_token %}
             <h4 class="text-center mb-3">Введите ваше имя:</h4>
             {{ add_feedback_form.name }}
             {% if add_feedback_form.name.errors %}
-                <div class="error_container mt-2">
-                    {{ add_feedback_form.name.errors }}
-                </div>
             {% endif %}
 
 
             <h4 class="text-center my-3">Введите текст отзыва:</h4>
             {{ add_feedback_form.text }}
             {% if add_feedback_form.text.errors %}
-                <div class="error_container">
-                    {{ add_feedback_form.text.errors }}
-                </div>
             {% endif %}
 
             <div class="d-grid col-6 mx-auto mt-4">
