@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 
 <div class="container">
-    <div class="task_container">
+    <div class="task_container" data-task-id="{{ task.id }}">
         <h2 class="text-center">Задача</h2>
         <div class="task_info">
             <h5 class="mb-3">Наименование:</h5>
@@ -31,28 +31,8 @@
         </div>
     </div>
     <hr class="my-4">
+    <h4 class="notes_counter mb-4"></h4>
     <div class="note_container">
-        <h4 class="mb-4">Заметки ({{ notes|length }})</h4>
-        {% for note in notes %}
-        <div class="note mb-4">
-            <p class="fw-bolder mb-0">{{ note.profile.user.username }}</p>
-            <p class="note-date">Дата: {{ note.created_at }}</p>
-            <p class="note-text mb-0">{{ note.note }}</p>
-            <a class="like_button" href="{% url 'api_note_like' task.id note.id %}">
-                <div class="like_container {% if note.is_liked %} liked {% endif %} d-flex justify-content-between align-items-center px-2 py-1 my-2">
-                    <div class="like_icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="{% if note.is_liked %}White{% else %}Gray{% endif %}"
-                             class="bi bi-heart-fill" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd"
-                                  d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
-                        </svg>
-                    </div>
-                    <p class="mb-0 like_counter {% if note.is_liked %} liked {% endif %}">{{ note.likes_count }}</p>
-                </div>
-            </a>
-
-        </div>
-        {% endfor %}
     </div>
     <hr class="my-4">
     <div class="note-form">
@@ -72,4 +52,6 @@
     </div>
 
 </div>
+
+ <script src="{% static 'js/task_detail.js' %}"></script>
 {% endblock content %}

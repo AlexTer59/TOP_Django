@@ -92,21 +92,6 @@ def task_detail(request, task_id):
     add_note_form = AddNoteModelForm()
     profile = request.user.profile
 
-    liked_notes_ids = TaskNoteLike.objects.filter(profile=profile, note__in=notes).values_list('note_id', flat=True)
-
-    my_task_notes =[]
-
-    for note in notes:
-        likes_count = note.note_likes.count()
-        my_task_notes.append({
-            'id': note.id,
-            'note': note.note,
-            'profile': note.profile,
-            'created_at': note.created_at,
-            'likes_count': likes_count,
-            'is_liked': note.id in liked_notes_ids,
-        })
-
     if request.method == 'POST':
         add_note_form = AddNoteModelForm(request.POST)
         if add_note_form.is_valid():
@@ -115,7 +100,6 @@ def task_detail(request, task_id):
             return redirect(task_detail, task_id)
     return render(request, 'task_detail.html',
                   {'task': task,
-                   'notes': my_task_notes,
                    'add_note_form': add_note_form,
                    'executors': executors
                    })
