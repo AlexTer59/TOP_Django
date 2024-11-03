@@ -4,7 +4,7 @@ function loadNotes() {
 
     $.ajax({
         type: 'GET',
-        url: baseUrl + `/api/tasks/${postId}/notes`,
+        url: baseUrl + `/api/rest/tasks/${postId}/notes`,
         success: function(response) {
             let notesHtml = ''
             $.each(response.notes, function(index, note) {
@@ -86,3 +86,33 @@ $(document).on('click', '.like_button', function(e) {
         },
     });
 });
+
+$('#NoteForm').on('submit', function(e) {
+    e.preventDefault();
+
+    $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: {
+            note: $('#id_note').val(),
+            csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
+        },
+
+        success: function(response) {
+            loadNotes();
+            $('#NoteForm')[0].reset();
+            $('.error_container').html('');
+        },
+
+        error: function(response) {
+            const errors = response.responseJSON;
+            let err = '';
+            for (let field in errors) {
+                for (let error of errors[field]) {
+                    err += '<p>' + error + '</p>'
+                }
+            }
+            $('error_container').html(err)
+        },
+    })
+})

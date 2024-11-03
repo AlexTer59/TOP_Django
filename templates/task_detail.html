@@ -37,14 +37,10 @@
     <hr class="my-4">
     <div class="note-form">
         <h4>Добавить заметку:</h4>
-        <form action="{% url 'task_detail' task.id %}" method="post">
+        <form id="NoteForm" action="{% url 'set_notes_rest' task.id %}" method="post">
             {% csrf_token %}
             {{ add_note_form.note }}
-            {% if add_note_form.note.errors %}
-            <div class="error_container mt-3">
-                {{ add_note_form.note.errors }}
-            </div>
-            {% endif %}
+            <div class="error_container mt-3"></div>
             <div class="d-grid mt-3">
                 <button type="submit" class="btn btn-primary">Отправить</button>
             </div>
