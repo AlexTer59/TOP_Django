@@ -60,3 +60,4 @@ def api_load_notes(request, task_id):
         })
 
     return JsonResponse({'notes': my_task_notes}, safe=False)
+

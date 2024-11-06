@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue.js</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class="app">
+        <h2 v-if="clicks>=10" style="color:blue">Не останавливайся</h2>
+        <h2 v-if="clicks>=50" style="color:blue"><a href="https://ya.ru/">https://ya.ru/</a></h2>
+
+        <ul>
+            <li v-for="film in films">[[ film ]]</li>
+        </ul>
+
+        <p class="clicks_counter">[[ clicks ]]</p>
+        <button @click="addClicks">Клик</button>
+        <button @click="getBonusClicks">Получить бонусные клики</button>
+    </div>
+
+
+</body>
+</html>
+<script>
+    const { createApp } = Vue
+
+createApp({
+    delimiters: ['[[', ']]'],
+    data() {
+        return {
+            films: ['Побег из Шоушенка', 'Леон', 'Поймай меня, если сможешь', 'Одержимость', 'Шоу Трумана'],
+            clicks: 0,
+        }
+    },
+    methods: {
+        addClicks() {
+            this.clicks += 10;
+        },
+
+        getBonusClicks() {
+            const baseUrl = 'http://127.0.0.1:8000';
+            axios.get(`${baseUrl}/api/rest/clicks`)
+            .then(response => {
+                this.clicks = response.data.clicks;
+            })
+        },
+    },
+}).mount('.app')
+</script>

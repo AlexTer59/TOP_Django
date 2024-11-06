@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from core.models import *
 from .serializers import TaskNoteSerializer
+import random
 
 
 @api_view(['GET'])
@@ -27,5 +28,7 @@ def set_notes_rest(request, task_id):
         return Response(serializer.errors, status=400)
 
 
-
+@api_view(['GET'])
+def get_random_clicks(request):
+    return Response({'clicks': random.randint(1, 100)})
 
