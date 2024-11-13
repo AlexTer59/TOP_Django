@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-<div class="container">
-    <div class="task_container" data-task-id="{{ task.id }}">
+
+<div class="container" id="task">
+    <div class="task_container" data-task-id="{{ task.id }}" id="task_container">
         <h2 class="text-center">Задача</h2>
         <div class="task_info">
             <h5 class="mb-3">Наименование:</h5>
@@ -31,16 +34,66 @@
         </div>
     </div>
     <hr class="my-4">
-    <h4 class="notes_counter mb-4"></h4>
-    <div class="note_container">
+    <h4 class="notes_counter mb-4">Заметки ([[ notes.length ]])</h4>
+    <div v-for="note in notes" class="note_container">
+        <div class="note mb-4">
+            <p class="fw-bolder mb-0">[[note.profile]]</p>
+            <p class="note-date">Дата: [[note.created_at]]</p>
+            <p class="note-text mb-0">[[note.note]]</p>
+            <div
+                    v-if="note.is_liked"
+                    @click="toggleLike"
+                    :data-note-id="note.id"
+                    class="like_button d-inline-block"
+            >
+                <div class="like_container liked d-flex justify-content-between align-items-center px-2 py-1 my-2">
+                    <div class="like_icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="White"
+                             class="bi bi-heart-fill" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+                        </svg>
+                    </div>
+                    <p class="mb-0 like_counter liked">[[note.likes_count]]</p>
+                </div>
+            </div>
+            <div v-if="!note.is_liked"
+                 @click="toggleLike"
+                 :data-note-id="note.id"
+                 class="like_button d-inline-block"
+            >
+                <div class="like_container d-flex justify-content-between align-items-center px-2 py-1 my-2">
+                    <div class="like_icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="Gray"
+                             class="bi bi-heart-fill" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                  d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+                        </svg>
+                    </div>
+                    <p class="mb-0 like_counter">[[note.likes_count]]</p>
+                </div>
+            </div>
+
+        </div>
+
     </div>
     <hr class="my-4">
     <div class="note-form">
         <h4>Добавить заметку:</h4>
-        <form id="NoteForm" action="{% url 'set_notes_rest' task.id %}" method="post">
+
+
+        <form @submit.prevent="addNote" id="NotesForm" action="{% url 'set_notes_rest' task.id %}" method="post">
             {% csrf_token %}
-            {{ add_note_form.note }}
-            <div class="error_container mt-3"></div>
+            <div>
+                <label class="mb-2" for="id_note">Заметка:</label>
+                <textarea v-model="notesForm.note" name="note" maxlength="1000"
+                          required="" id="id_note" class="form-control">
+                </textarea>
+            </div>
+            <div class="error_container mt-2">
+                <ul>
+                    <li class="error" v-for="error in notesForm.errors.note">[[ error ]]</li>
+                </ul>
+            </div>
             <div class="d-grid mt-3">
                 <button type="submit" class="btn btn-primary">Отправить</button>
             </div>
@@ -48,6 +101,6 @@
     </div>
 
 </div>
+<script src="{% static 'js/task_detail.js' %}"></script>
 
- <script src="{% static 'js/task_detail.js' %}"></script>
 {% endblock content %}

@@ -152,6 +152,7 @@ nav, footer {
     width: 50px;
     background-color: #ababab;
     border-radius: 20px;
+    cursor: pointer;
 }
 
 .liked {
@@ -179,6 +180,10 @@ nav, footer {
     background-color: #d66978;
     text-align: center;
     border-radius: 5px;
+}
+
+.error {
+    list-style-type: none;
 }
 
 .errorlist {
