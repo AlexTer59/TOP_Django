@@ -63,6 +63,8 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware'
 ]
 
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'my_notes.urls'
